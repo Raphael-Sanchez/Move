@@ -1,3 +1,19 @@
-Hello Bienvenue sur ta board <strong>{% if user.username is not null %}{{ user.username }}{% endif %}</strong> !
-<br>
-<a href="logout">Déconnexion</a>
+{% extends "base.html.twig" %}
+
+{% block title %}Ma Board{% endblock %}
+
+{% block css %}
+    {{ asset('user_board.css') }}
+{% endblock css %}
+
+{% block body %}
+
+    Hello Bienvenue sur ta board <strong>{% if user.username is not null %}{{ user.username }}{% endif %}</strong> !
+    <br>
+    <a href="logout">Déconnexion</a>
+
+    <br>
+    <br>
+    {#<li><a href="{{ path(base_route~"_edit", {'id': entity.id}) }}"><i class="icon-pencil white"></i> </a></li>#}
+    <a href="{{ path("user_create_new_event", {'id': user.id}) }}"><input type="button" value="Créer un évènement"></a>
+{% endblock %}
