@@ -20,7 +20,7 @@ class User extends BaseUser
     protected $id;
 
     /**
-     * @ORM\OneToMany(targetEntity="\UserBundle\Entity\UserEvent", cascade={"persist","remove"})
+     * @ORM\OneToMany(targetEntity="\UserBundle\Entity\UserEvent", mappedBy="UserEvent")
      */
     protected $events;
 
