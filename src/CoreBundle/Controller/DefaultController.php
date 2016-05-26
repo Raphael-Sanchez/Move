@@ -17,6 +17,6 @@ class DefaultController extends Controller
             }
         }
 
-        return $this->render('CoreBundle:Default:index.html.twig');
+        return $this->render('CoreBundle:Default:base.html.twig');
     }
 }
