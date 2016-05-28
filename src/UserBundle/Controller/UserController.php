@@ -38,15 +38,13 @@ class UserController extends Controller
 
                 $form->handleRequest($request);
 
-                if($form->isSubmitted())
+                if ($form->isValid())
                 {
-                    var_dump($form->isSubmitted());
-                    die();
-                }
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($form);
+                    $em->flush();
 
-                if ($form->isSubmitted() && $form->isValid()) {
-                    // ... perform some action, such as saving the task to the database
-                    return $this->redirectToRoute('/board');
+                    return $this->redirect($this->generateUrl('/board'));
                 }
 
                 return $this->render('UserBundle:Form:new_event.html.twig', array(
