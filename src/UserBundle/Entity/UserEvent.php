@@ -20,7 +20,6 @@ class UserEvent
     protected $id;
 
     /**
-     * @Assert\NotNull()
      * @var boolean
      * @ORM\Column(type="boolean", name="private", nullable=false, options={"default": 0})
      */
@@ -34,9 +33,10 @@ class UserEvent
     */
     protected $placeAvailable;
 
-
-
-
+    public function __construct()
+    {
+        $this->private = 0;
+    }
 
     /**
      * @return mixed
