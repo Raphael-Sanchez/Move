@@ -1,6 +1,6 @@
 <?php
 
-namespace UserBundle\Entity;
+namespace EventBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
@@ -8,9 +8,9 @@ use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="user_event")
+ * @ORM\Table(name="event")
  */
-class UserEvent
+class Event
 {
     /**
      * @ORM\Id
@@ -26,11 +26,11 @@ class UserEvent
     protected $private;
 
     /**
-    * @var integer
-    *
-    * @Assert\NotBlank()
-    * @ORM\Column(type="integer", nullable=false)
-    */
+     * @var integer
+     *
+     * @Assert\NotBlank()
+     * @ORM\Column(type="integer", nullable=false)
+     */
     protected $placeAvailable;
 
     public function __construct()
@@ -48,7 +48,7 @@ class UserEvent
 
     /**
      * @param mixed $id
-     * @return UserEvent
+     * @return Event
      */
     public function setId($id)
     {
@@ -66,7 +66,7 @@ class UserEvent
 
     /**
      * @param boolean $private
-     * @return UserEvent
+     * @return Event
      */
     public function setPrivate($private)
     {
@@ -84,7 +84,7 @@ class UserEvent
 
     /**
      * @param int $placeAvailable
-     * @return UserEvent
+     * @return Event
      */
     public function setPlaceAvailable($placeAvailable)
     {

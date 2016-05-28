@@ -1,0 +1,3 @@
+create_new_event:
+    path:     /create/event
+    defaults: { _controller: EventBundle:Event:createEvent }

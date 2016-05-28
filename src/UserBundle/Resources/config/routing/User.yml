@@ -1,5 +1,0 @@
-user_create_new_event:
-    path: /create/new/event/{id}
-    defaults: { _controller: UserBundle:User:createNewEvent }
-    requirements:
-        id:  \d+

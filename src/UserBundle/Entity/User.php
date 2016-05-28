@@ -19,16 +19,10 @@ class User extends BaseUser
      */
     protected $id;
 
-    /**
-     * @ORM\OneToMany(targetEntity="\UserBundle\Entity\UserEvent", mappedBy="UserEvent")
-     */
-    protected $events;
-
-
-    public function __construct()
-    {
-        $this->events = new ArrayCollection();
-    }
+//    /**
+//     * @ORM\OneToMany(targetEntity="\UserBundle\Entity\Event", mappedBy="Event")
+//     */
+//    protected $events;
 
     /**
      * @return mixed
@@ -44,21 +38,5 @@ class User extends BaseUser
     public function setId($id)
     {
         $this->id = $id;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getEvents()
-    {
-        return $this->events;
-    }
-
-    /**
-     * @param mixed $events
-     */
-    public function setEvents($events)
-    {
-        $this->events = $events;
     }
 }
