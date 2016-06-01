@@ -1,0 +1,21 @@
+<h1>Formulaire Création d'évènement</h1>
+
+{{ form_start(form) }}
+
+    <div>
+        <h2>Lieu</h2>
+        {{ form_row(form.address) }}
+        {{ form_row(form.zip) }}
+        {{ form_row(form.city) }}
+        {{ form_row(form.addressComplement) }}
+    </div>
+    <div>
+        <h2>Informations évènement</h2>
+        {{ form_row(form.private) }}
+        {{ form_row(form.placeAvailable) }}
+        {{ form_row(form.price) }}
+    </div>
+    <br>
+    {{ form_row(form.submit) }}
+
+{{ form_end(form) }}
