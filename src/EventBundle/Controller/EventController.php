@@ -4,8 +4,8 @@ namespace EventBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\EventDispatcher\Event;
 use EventBundle\Form\EventType;
+use EventBundle\Entity\Event;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 
 class EventController extends Controller
@@ -21,16 +21,15 @@ class EventController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $event->setCreatedBy($this->getUser()->getId());
             $em = $this->getDoctrine()->getManager();
             $em->persist($event);
             $em->flush();
 
-//            return $this->render($this->generateUrl(
-//                'create_event',
-//                array('id' => $event->getId())
-//            ));
+            return $this->redirectToRoute("core_homepage");
         }
 
-        return $this->render('EventBundle:Form:create.html.twig');
+        return $this->render("EventBundle:Form:create_event.html.twig", array('form' => $form->createView()));
+
     }
 }
