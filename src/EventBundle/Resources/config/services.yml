@@ -1,4 +1,0 @@
-services:
-    app.form.type.gender:
-        class: EventBundle\Form\EventType
-
