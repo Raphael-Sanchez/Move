@@ -19,11 +19,6 @@ class User extends BaseUser
      */
     protected $id;
 
-//    /**
-//     * @ORM\OneToMany(targetEntity="\UserBundle\Entity\Event", mappedBy="Event")
-//     */
-//    protected $events;
-
     /**
      * @return mixed
      */
