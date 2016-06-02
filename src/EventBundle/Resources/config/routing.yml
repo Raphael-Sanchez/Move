@@ -2,6 +2,10 @@ create_new_event:
     path:     /create/event
     defaults: { _controller: EventBundle:Event:createEvent }
 
+all_events:
+    path:     /all/events
+    defaults: { _controller: EventBundle:Event:allEvents }
+
 create_new_activity:
     path:     /create/activity
     defaults: { _controller: EventBundle:Activity:createActivity }

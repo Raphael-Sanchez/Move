@@ -9,6 +9,8 @@ use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\DateTimeType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Doctrine\ORM\EntityRepository;
 use EventBundle\Entity\Event;
@@ -40,6 +42,12 @@ class EventType extends AbstractType
                 'choice_label'  => 'name',
                 'label'         => 'Activité'
             ))
+            ->add('date', DateTimeType::class, array(
+                'required'   => true,
+                'input'     => 'datetime',
+                'format'    => 'dd/MM/yyyy',
+                'attr'      => array('class' => 'date'),
+            ))
             ->add('address', TextType::class, array(
                 "required"	    => true,
                 "label"         => 'Adresse',
@@ -70,6 +78,10 @@ class EventType extends AbstractType
             ->add('price', NumberType::class, array(
                 "required"      => true,
                 "label"         => 'Prix',
+            ))
+            ->add('additionalInfo', TextareaType::class, array(
+                "required"      => false,
+                "label"         => 'Informations Complémentaires',
             ))
         ;
     }

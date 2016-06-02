@@ -2,6 +2,7 @@
 
 namespace EventBundle\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -67,21 +68,50 @@ class Event
     protected $price;
 
     /**
-     * @ORM\OneToOne(targetEntity="EventBundle\Entity\Activity")
-     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
+     * @ORM\ManyToOne(targetEntity="EventBundle\Entity\Activity")
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=false)
      */
     protected $activity;
 
     /**
-     * @ORM\OneToOne(targetEntity="UserBundle\Entity\User", cascade={"persist"})
+     * @ORM\ManyToOne(targetEntity="UserBundle\Entity\User")
      * @ORM\JoinColumn(referencedColumnName="id", nullable=false)
      */
     protected $createdBy;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="date", type="datetime", nullable=false)
+     */
+    protected $date;
+
+    /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="created_at", type="datetime", nullable=false)
+     */
+    protected $createdAt;
+
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $additionalInfo;
+
+    /**
+     * @var ArrayCollection
+     *
+     * @ORM\OneToMany(targetEntity="\UserBundle\Entity\User", mappedBy="id", cascade={"persist"})
+     */
+    protected $participants;
 
 
     public function __construct()
     {
         $this->private = 0;
+        $this->participants = new ArrayCollection();
     }
 
     /**
@@ -261,6 +291,97 @@ class Event
     public function setCreatedBy($createdBy)
     {
         $this->createdBy = $createdBy;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getDate()
+    {
+        return $this->date;
+    }
+
+    /**
+     * @param \DateTime $date
+     * @return Event
+     */
+    public function setDate($date)
+    {
+        $this->date = $date;
+        return $this;
+    }
+
+    /**
+     * @return \DateTime
+     */
+    public function getCreatedAt()
+    {
+        return $this->createdAt;
+    }
+
+    /**
+     * @param \DateTime $createdAt
+     * return Event
+     */
+    public function setCreatedAt($createdAt)
+    {
+        $this->createdAt = $createdAt;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAdditionalInfo()
+    {
+        return $this->additionalInfo;
+    }
+
+    /**
+     * @param string $additionalInfo
+     * return Event
+     */
+    public function setAdditionalInfo($additionalInfo)
+    {
+        $this->additionalInfo = $additionalInfo;
+        return $this;
+    }
+
+    /**
+     * @return ArrayCollection
+     */
+    public function getParticipants()
+    {
+        return $this->participants;
+    }
+
+    /**
+     * @param ArrayCollection $participants
+     * return Event
+     */
+    public function setParticipants($participants)
+    {
+        $this->participants = $participants;
+        return $this;
+    }
+
+    /**
+     * @param $participant
+     * @return Event
+     */
+    public function addParticipant($participant)
+    {
+        $this->participants[] = $participant;
+        return $this;
+    }
+    /**
+     * @param $participant
+     * @return Event
+     */
+    public function removeParticipant($participant)
+    {
+        $this->participants->remove($participant);
         return $this;
     }
 

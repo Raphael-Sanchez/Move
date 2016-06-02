@@ -7,7 +7,13 @@
     Hello Bienvenue sur ta board <strong>{% if user.username is not null %}{{ user.username }}{% endif %}</strong> !
     <br>
     <a href="logout">Déconnexion</a>
-
+    <br>
+    <div id="block-events" style="margin-top:80px; height: 150px; width: 200px; border: 1px solid black; display: inline-block; font-family: 'Helvetica Neue'; text-align: center; padding-top: 60px; box-sizing: border-box;">
+        <a href="{{ path("all_events") }}">Évènements</a>
+    </div>
+    <div id="block-my-events" style="height: 150px; width: 200px; border: 1px solid black; display: inline-block; font-family: 'Helvetica Neue'; text-align: center; padding-top: 60px; box-sizing: border-box;">
+        <a href="">Mes Évènements</a>
+    </div>
     <br>
     <br>
     <a href="{{ path("create_new_event") }}"><input type="button" value="Créer un évènement"></a>
