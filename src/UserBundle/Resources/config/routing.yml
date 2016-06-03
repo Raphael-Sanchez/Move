@@ -6,3 +6,11 @@ register_new_participant:
     defaults: { _controller: EventBundle:Event:registerUserForEvent }
     requirements:
             id:  \d+
+
+all_user_events:
+    path:     /all/my/events
+    defaults: { _controller: EventBundle:Event:allUserEvent }
+    requirements:
+            id:  \d+
+
+
