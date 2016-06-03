@@ -5,11 +5,14 @@ namespace EventBundle\Entity;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Doctrine\ORM\Mapping\JoinColumns;
+use Doctrine\ORM\Mapping\JoinColumn;
 
 
 /**
  * @ORM\Entity
  * @ORM\Table(name="event")
+ * @ORM\Entity(repositoryClass="EventBundle\Repository\EventRepository")
  */
 class Event
 {
@@ -103,7 +106,8 @@ class Event
     /**
      * @var ArrayCollection
      *
-     * @ORM\OneToMany(targetEntity="\UserBundle\Entity\User", mappedBy="id", cascade={"persist"})
+     * @ORM\ManyToMany(targetEntity="UserBundle\Entity\User")
+     * @ORM\JoinColumn(referencedColumnName="id", nullable=true)
      */
     protected $participants;
 
