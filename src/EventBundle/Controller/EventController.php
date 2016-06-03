@@ -5,6 +5,7 @@ namespace EventBundle\Controller;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
+use EventBundle\Repository\EventRepository;
 use EventBundle\Form\EventType;
 use EventBundle\Entity\Event;
 
@@ -43,10 +44,13 @@ class EventController extends Controller
 
     public function registerUserForEventAction($id)
     {
+        $events = $this->getDoctrine()->getManager()->getRepository('EventBundle:Event')->findAll();
         $event = $this->getDoctrine()->getManager()->getRepository('EventBundle:Event')->find($id);
+        $user = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->find($this->getUser()->getId());
         $placeAvailable = $event->getPlaceAvailable();
+        $success = false;
 
-        if ($placeAvailable >= 1)
+        if($placeAvailable >= 1)
         {
             $event->addParticipant($this->getUser());
             $event->setPlaceAvailable($placeAvailable - 1);
@@ -54,9 +58,21 @@ class EventController extends Controller
             $em = $this->getDoctrine()->getManager();
             $em->persist($event);
             $em->flush();
+
+            $success = true;
         }
 
-        return $this->redirectToRoute("core_homepage");
+        return $this->render("UserBundle:User:all_events.html.twig", array('user' => $user, 'success' => $success, 'events' => $events));
+    }
+
+    public function allUserEventAction()
+    {
+        $user = $this->getUser();
+
+        $em = $this->getDoctrine()->getManager();
+        $eventsUser = $em->getRepository('EventBundle:Event')->findAllEventForOneUser($user);
+
+        return $this->render("UserBundle:User:all_user_events.html.twig", array('user' => $user, 'events' => $eventsUser));
     }
 
 }
