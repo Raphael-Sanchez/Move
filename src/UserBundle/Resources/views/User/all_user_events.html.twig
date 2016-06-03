@@ -1,0 +1,74 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Évènements auquel tu participe{% endblock %}
+
+{% block body %}
+
+    Voici tout les évènements auquel tu participe <strong>{% if user.username is not null %}{{ user.username }}{% endif %}</strong> !
+    {#<a href="logout" style="float: right;">Déconnexion</a>#}
+    <br>
+    <br>
+    <h2 style="text-align: center">Évènements auquel tu participe</h2>
+    <table>
+    {% for event in events %}
+        {% if event.date|date('Y/m/d H:i') >= 'now'|date('Y/m/d H:i') %}
+            <thead>
+            <tr>
+                <th>Activité</th>
+                <th>Date</th>
+                <th>Place Disponible</th>
+                <th>Prix</th>
+                <th>Lieu</th>
+                <th>Créé par</th>
+                <th>Participants</th>
+                <th>S'inscrire</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>
+                    {{ event.activity.name }}
+                    {% if event.additionalInfo is not null %}<br><br>{{ event.additionalInfo }}{% endif %}
+                </td>
+                <td>{{ event.date|date('d/m/Y H:i') }}</td>
+                <td>{{ event.placeAvailable }}</td>
+                <td>{{ event.price }}€</td>
+                <td>
+                    {{ event.address }}, {{ event.zip }} {{ event.city }}
+                    {% if event.addressComplement is not null %}{{ event.addressComplement }}{% endif %}
+                </td>
+                <td>{{ event.createdBy.username|capitalize }}</td>
+                <td>
+                    {% for participant in event.participants %}
+                        <br>{{ participant|capitalize }}
+                    {% endfor %}
+                </td>
+                <td>
+                    {% if event.createdBy == user %}
+                        Vous êtes l'administrateur de l'évènement
+                        <br><a href=""><input type="submit" value="Modifier"></a>
+                    {% else %}
+                        <a href=""><input type="submit" value="Voir l'évènement"></a>
+                    {% endif %}
+                </td>
+            </tr>
+            </tbody>
+        {% endif %}
+    {% endfor %}
+    </table>
+    <style>
+        table
+        {
+            border: 1px solid black;
+            text-align: center;
+            border-collapse: collapse;
+            margin: auto;
+            margin-top: 100px;
+        }
+
+        td, th
+        {
+            border: 1px solid black;
+        }
+    </style>
+{% endblock %}
