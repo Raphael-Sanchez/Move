@@ -4,11 +4,14 @@
 
 {% block body %}
 
-    Voici tout les évènements à venir <strong>{% if user.username is not null %}{{ user.username }}{% endif %}</strong> !
-    <a href="logout" style="float: right;">Déconnexion</a>
+    Voici tout les évènements à venir <strong>{% if user.username is not null %}{{ user.username|capitalize }}{% endif %}</strong> !
+    {#<a href="logout" style="float: right;">Déconnexion</a>#}
     <br>
     <br>
     <h2 style="text-align: center">Évènements à venir</h2>
+    {% if success is defined and success != false %}
+        <div id="success-msg">Vous êtes désormais inscrit sur l'évènement !</div>
+    {% endif %}
     <table style="border: 1px solid black; border-collapse:collapse; margin: auto; margin-top: 100px;">
         {% for event in events %}
             {% if event.date|date('Y/m/d H:i') >= 'now'|date('Y/m/d H:i') %}
@@ -40,10 +43,31 @@
                     <td>{{ event.createdBy.username|capitalize }}</td>
                     <td>
                         {% for participant in event.participants %}
-                            {{ dump(participant)}}
+                            <br>{{ participant|capitalize }}
                         {% endfor %}
                     </td>
-                    <td><a href="{{ path('register_new_participant', {'id': event.id}) }}"><input type="submit" value="S'incrire"></a></td>
+                    <td>
+                        {% if event.createdBy != user %}
+                            {# SI L'USER N'EST PAS LE CREATEUR DE L'EVENT #}
+
+                            {% for participant in event.participants %}
+
+                                {# SI ID PARTICIPANT = ID USER #}
+                                {% if participant.id == user.id %}
+                                    <a href=""><input type="submit" value="Se désinscrire"></a>
+                                {# SINON SI PLACE DISPO #}
+                                {% elseif event.placeAvailable >= 1 %}
+                                    S'inscrire
+                                    <a href="{{ path('register_new_participant', {'id': event.id}) }}"><input type="submit" value="S'incrire"></a>
+                                {% endif %}
+
+                            {% endfor %}
+
+                        {% else %}
+                            {# SINON EDITER L'EVENT #}
+                            <a href=""><input type="submit" value="Éditer"></a>
+                        {% endif %}
+                    </td>
                 </tr>
             </tbody>
             {% endif %}
