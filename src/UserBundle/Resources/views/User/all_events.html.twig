@@ -1,83 +1,103 @@
-{% extends "base.html.twig" %}
+{#{% extends "base.html.twig" %}#}
 
-{% block title %}Évènements{% endblock %}
+{#{% block title %}Évènements{% endblock %}#}
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {# MATERIALIZE #}
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{{ asset('bundles/framework/css/materialize/materialize.min.css') }}"  media="screen,projection"/>
+    {# BOOTSTRAP #}
+    <link href="{{ asset('bundles/framework/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+</head>
 
 {% block body %}
-
-    Voici tout les évènements à venir <strong>{% if user.username is not null %}{{ user.username|capitalize }}{% endif %}</strong> !
+    Connecté en tant que <strong>{% if user.username is not null %}{{ user.username|capitalize }}{% endif %}</strong>
     {#<a href="logout" style="float: right;">Déconnexion</a>#}
     <br>
     <br>
     <h2 style="text-align: center">Évènements à venir</h2>
+
     {% if success is defined and success != false %}
         <div id="success-msg">Vous êtes désormais inscrit sur l'évènement !</div>
     {% endif %}
-    <table style="border: 1px solid black; border-collapse:collapse; margin: auto; margin-top: 100px;">
-        {% for event in events %}
-            {% if event.date|date('Y/m/d H:i') >= 'now'|date('Y/m/d H:i') %}
-            <thead>
-            <tr>
-                <th>Activité</th>
-                <th>Date</th>
-                <th>Place Disponible</th>
-                <th>Prix</th>
-                <th>Lieu</th>
-                <th>Créé par</th>
-                <th>Participants</th>
-                <th>S'inscrire</th>
-            </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        {{ event.activity.name }}
-                        {% if event.additionalInfo is not null %}<br><br>{{ event.additionalInfo }}{% endif %}
-                    </td>
-                    <td>{{ event.date|date('d/m/Y H:i') }}</td>
-                    <td>{{ event.placeAvailable }}</td>
-                    <td>{{ event.price }}€</td>
-                    <td>
-                        {{ event.address }}, {{ event.zip }} {{ event.city }}
-                        {% if event.addressComplement is not null %}{{ event.addressComplement }}{% endif %}
-                    </td>
-                    <td>{{ event.createdBy.username|capitalize }}</td>
-                    <td>
-                        {% for participant in event.participants %}
-                            <br>{{ participant|capitalize }}
-                        {% endfor %}
-                    </td>
-                    <td>
-                        {% if event.createdBy != user %}
-                            {# SI L'USER N'EST PAS LE CREATEUR DE L'EVENT #}
 
-                            {% for participant in event.participants %}
-
-                                {# SI ID PARTICIPANT = ID USER #}
-                                {% if participant.id == user.id %}
-                                    <a href=""><input type="submit" value="Se désinscrire"></a>
-                                {# SINON SI PLACE DISPO #}
-                                {% elseif event.placeAvailable >= 1 %}
-                                    S'inscrire
-                                    <a href="{{ path('register_new_participant', {'id': event.id}) }}"><input type="submit" value="S'incrire"></a>
+    <div class="container-fluid" style="margin-top: 100px">
+        <div class="row">
+            {% for event in events %}
+                {% if event.date|date('Y/m/d H:i') >= 'now'|date('Y/m/d H:i') %}
+                <div class="col-md-3">
+                    <div style="width: 300px;">
+                        <div class="card">
+                            <div class="card-image waves-effect waves-block waves-light">
+                                <img class="activator" src="http://fakeimg.pl/350x200/?text=Aviron&font=lobster">
+                            </div>
+                            <div class="card-content">
+                                <div class="card-title activator grey-text text-darken-4">{{ event.activity.name }}<i class="material-icons right">more_vert</i></div>
+                                {% if event.date|date('Y/m/d H:i') is not null %}<img src="{{ asset('bundles/framework/icons/icon_date.svg') }}" alt="icon-date"> {{ event.date|date('d/m/Y H:i')|replace(':', 'h') }}{% endif %}
+                                {% if event.placeAvailable >= 1 %}<br><img src="{{ asset('bundles/framework/icons/icon_place_available.svg') }}" alt="icon-place-available">{{ event.placeAvailable }} Places disponibles{% endif %}
+                                {% if event.price is not null %}<br><img src="{{ asset('bundles/framework/icons/icon_cash.svg') }}" alt="icon-cash">Prix {{ event.price }} € / Personne{% endif %}
+                                {% if event.city is not null %}<br><img src="{{ asset('bundles/framework/icons/icon_place.svg') }}" alt="icon-place">{{ event.zip }} {{ event.city }}, {{ event.address }}{% endif %}
+                            </div>
+                            <div class="card-reveal">
+                                <span class="card-title grey-text text-darken-4">
+                                    <div class="chip">
+                                        <img src="{{ asset('bundles/framework/images/raphael.jpg') }}" alt="img-person">
+                                        {{ event.createdBy|capitalize }}
+                                    </div>
+                                    <i class="material-icons right">close</i></span>
+                                {% if event.additionalInfo is not null %}
+                                    <h3>Informations</h3>
+                                    <p>{{ event.additionalInfo }}</p>
                                 {% endif %}
-
-                            {% endfor %}
-
-                        {% else %}
-                            {# SINON EDITER L'EVENT #}
-                            <a href=""><input type="submit" value="Éditer"></a>
-                        {% endif %}
-                    </td>
-                </tr>
-            </tbody>
-            {% endif %}
-        {% endfor %}
-    </table>
+                            </div>
+                            <div class="card-action">
+                                {% if event.createdBy != user %}
+                                    {% if event.userParticipe(user) == false and event.placeAvailable >= 1%}
+                                        <a  href="{{ path('register_participant', {'id': event.id}) }}" class="waves-effect waves-light btn">Participer</a>
+                                    {% elseif event.userParticipe(user) == true %}
+                                        <a  href="{{ path('unregister_participant', {'id': event.id}) }}" class="waves-effect waves-light btn">Se désinscrire</a>
+                                    {% endif %}
+                                {% else %}
+                                    <a  href="" class="waves-effect waves-light btn">Modifier</a>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
     <style>
         td, th
         {
             text-align: center;
             border: 1px solid black;
         }
+
+        body
+        {
+            background-color: #e8e8e8;
+            padding-left: 50px;
+            padding-right: 50px;
+        }
+
+        img
+        {
+           paddin-left: 0px;
+        }
+
+
+
     </style>
+    {# MATERIALIZE#}
+    <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+    <script type="text/javascript" src="{{ asset('bundles/framework/js/materialize/materialize.min.js') }}"></script>
+    {# BOOTSTRAP #}
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+    <script src="{{ asset('bundles/framework/bootstrap/dist/js/bootstrap.min.js') }}"></script>
 {% endblock %}
+
