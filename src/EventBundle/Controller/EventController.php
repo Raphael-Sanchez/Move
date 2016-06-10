@@ -23,6 +23,7 @@ class EventController extends Controller
 
         if ($form->isSubmitted() && $form->isValid()) {
             $event->setCreatedBy($this->getUser());
+            $event->addParticipant($this->getUser());
             $event->setCreatedAt(new \DateTime('now'));
             $em = $this->getDoctrine()->getManager();
             $em->persist($event);
@@ -44,25 +45,58 @@ class EventController extends Controller
 
     public function registerUserForEventAction($id)
     {
-        $events = $this->getDoctrine()->getManager()->getRepository('EventBundle:Event')->findAll();
         $event = $this->getDoctrine()->getManager()->getRepository('EventBundle:Event')->find($id);
-        $user = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->find($this->getUser()->getId());
         $placeAvailable = $event->getPlaceAvailable();
-        $success = false;
 
-        if($placeAvailable >= 1)
+        if($event->isUserParticipe($this->getUser()))
         {
-            $event->addParticipant($this->getUser());
-            $event->setPlaceAvailable($placeAvailable - 1);
+            // return flashbag user deja enregistré
+        }
+        else
+        {
+            if($placeAvailable >= 1)
+            {
+                $event->addParticipant($this->getUser());
+                $event->setPlaceAvailable($placeAvailable - 1);
 
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($event);
-            $em->flush();
+                $em = $this->getDoctrine()->getManager();
+                $em->persist($event);
+                $em->flush();
 
-            $success = true;
+            }
         }
 
-        return $this->render("UserBundle:User:all_events.html.twig", array('user' => $user, 'success' => $success, 'events' => $events));
+        return $this->redirectToRoute("all_events");
+
+    }
+
+    public function unregisterUserForEventAction($id)
+    {
+        $event = $this->getDoctrine()->getManager()->getRepository('EventBundle:Event')->find($id);
+        $user = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->find($this->getUser()->getId());
+
+        if($event->isUserParticipe($this->getUser()))
+        {
+            foreach($event->getParticipants() as $participant)
+            {
+                if($participant->getId() == $user->getId())
+                {
+                    $event->removeParticipant($user->getId());
+                    
+                    $em = $this->getDoctrine()->getManager();
+                    $em->persist($event);
+                    $em->flush();
+//                    var_dump(count($event->getParticipants()));
+//                    die();
+                    return $this->redirectToRoute("all_events");
+                }
+            }
+        }
+        else
+        {
+            // return flashbag user deja désenregistré
+        }
+
     }
 
     public function allUserEventAction()
