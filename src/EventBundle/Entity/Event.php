@@ -118,6 +118,22 @@ class Event
         $this->participants = new ArrayCollection();
     }
 
+    public function isUserParticipe($userLogged)
+    {
+        if(count($this->getParticipants()) >= 1)
+        {
+            foreach($this->getParticipants() as $participant)
+            {
+                if($participant->getId() == $userLogged->getId())
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+    }
+
     /**
      * @return mixed
      */
