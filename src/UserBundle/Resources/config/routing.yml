@@ -1,9 +1,15 @@
 fos_user:
     resource: "@FOSUserBundle/Resources/config/routing/all.xml"
 
-register_new_participant:
+register_participant:
     path:     /register/for/event/{id}
     defaults: { _controller: EventBundle:Event:registerUserForEvent }
+    requirements:
+            id:  \d+
+
+unregister_participant:
+    path:   /unregister/for/event/{id}
+    defaults: { _controller: EventBundle:Event:unregisterUserForEvent }
     requirements:
             id:  \d+
 
