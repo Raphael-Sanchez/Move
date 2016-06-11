@@ -401,8 +401,7 @@ class Event
      */
     public function removeParticipant($participant)
     {
-        $this->participants->remove($participant);
+        $this->participants->removeElement($participant);
         return $this;
     }
-
 }
