@@ -74,6 +74,7 @@ class EventController extends Controller
     {
         $event = $this->getDoctrine()->getManager()->getRepository('EventBundle:Event')->find($id);
         $user = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->find($this->getUser()->getId());
+        $placeAvailable = $event->getPlaceAvailable();
 
         if($event->isUserParticipe($this->getUser()))
         {
@@ -81,13 +82,13 @@ class EventController extends Controller
             {
                 if($participant->getId() == $user->getId())
                 {
-                    $event->removeParticipant($user->getId());
-                    
+                    $event->removeParticipant($participant);
+                    $event->setPlaceAvailable($placeAvailable + 1);
+
                     $em = $this->getDoctrine()->getManager();
                     $em->persist($event);
                     $em->flush();
-//                    var_dump(count($event->getParticipants()));
-//                    die();
+
                     return $this->redirectToRoute("all_events");
                 }
             }
