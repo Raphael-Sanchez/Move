@@ -35,6 +35,35 @@ class EventController extends Controller
         return $this->render("EventBundle:Form:create_event.html.twig", array('form' => $form->createView()));
     }
 
+    public function editEventAction(Request $request, $id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('EventBundle:Event')->find($id);
+        if (!$event) {
+            throw $this->createNotFoundException(
+                'No news found for id ' . $id
+            );
+        }
+
+        $event = new Event();
+        $form = $this->createForm(EventType::class, $event);
+        $form->add('submit', SubmitType::class, array(
+            'label' => 'Envoyer',
+        ));
+
+        $form->handleRequest($request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $em->flush();
+            return new Response('News updated successfully');
+        }
+
+//        $build['form'] = $form->createView();
+//
+//        return $this->render('FooNewsBundle:Default:news_add.html.twig', $build);
+        return $this->render("EventBundle:Form:edit_event.html.twig", array('form' => $form->createView()));
+    }
+
     public function allEventsAction()
     {
         $events = $this->getDoctrine()->getManager()->getRepository('EventBundle:Event')->findAll();
