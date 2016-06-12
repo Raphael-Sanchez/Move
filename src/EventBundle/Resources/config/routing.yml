@@ -1,6 +1,12 @@
-create_new_event:
+create_event:
     path:     /create/event
     defaults: { _controller: EventBundle:Event:createEvent }
+
+edit_event:
+    pattern:  /edit/event/{id}
+    defaults: { _controller: EventBundle:Event:editEvent }
+    requirements:
+        id:  \d+
 
 all_events:
     path:     /all/events
