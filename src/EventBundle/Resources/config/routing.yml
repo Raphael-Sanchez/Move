@@ -3,15 +3,25 @@ create_event:
     defaults: { _controller: EventBundle:Event:createEvent }
 
 edit_event:
-    pattern:  /edit/event/{id}
+    path:  /edit/event/{id}
     defaults: { _controller: EventBundle:Event:editEvent }
     requirements:
-        id:  \d+
+          id:  \d+
 
 all_events:
     path:     /all/events
     defaults: { _controller: EventBundle:Event:allEvents }
 
+all_events_past:
+    path:     /all/events/past
+    defaults: { _controller: EventBundle:Event:allEventsPast }
+
 create_new_activity:
     path:     /create/activity
     defaults: { _controller: EventBundle:Activity:createActivity }
+
+event_photo_album:
+    path:     /event/photo/album/{id}
+    defaults: { _controller: EventBundle:Event:photoAlbum }
+    requirements:
+          id:  \d+

@@ -111,6 +111,13 @@ class Event
      */
     protected $participants;
 
+    /**
+     * @var string
+     *
+     * @ORM\Column(type="text", nullable=true)
+     */
+    protected $linkAlbum;
+
 
     public function __construct()
     {
@@ -404,4 +411,21 @@ class Event
         $this->participants->removeElement($participant);
         return $this;
     }
+
+    /**
+     * @return mixed
+     */
+    public function getLinkAlbum()
+    {
+        return $this->linkAlbum;
+    }
+
+    /**
+     * @param mixed $linkAlbum
+     */
+    public function setLinkAlbum($linkAlbum)
+    {
+        $this->linkAlbum = $linkAlbum;
+    }
+
 }

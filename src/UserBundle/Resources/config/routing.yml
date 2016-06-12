@@ -19,4 +19,6 @@ all_user_events:
     requirements:
             id:  \d+
 
-
+add_photo_link:
+    path:     /add/photo
+    defaults: { _controller: EventBundle:Event:addPhoto }

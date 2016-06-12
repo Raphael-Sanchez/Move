@@ -22,12 +22,12 @@
         <div id="success-msg">Vous êtes désormais inscrit sur l'évènement !</div>
     {% endif %}
 
-    <div class="container-fluid" style="margin-top: 100px">
+    <div class="container-fluid" style="margin-top: 100px;">
         <div class="row">
             {% for event in events %}
                 {% if event.date|date('Y/m/d H:i') >= 'now'|date('Y/m/d H:i') %}
                     <div class="col-md-3">
-                        <div style="width: 300px;">
+                        <div style="width: 300px; padding-right: 20px; box-sizing: border-box;">
                             <div class="card">
                                 <div class="card-image waves-effect waves-block waves-light">
                                     <img class="activator" src="http://fakeimg.pl/350x200/?text=Aviron&font=lobster">
@@ -60,7 +60,7 @@
                                             <a  href="{{ path('unregister_participant', {'id': event.id}) }}" class="waves-effect waves-light btn">Se désinscrire</a>
                                         {% endif %}
                                     {% else %}
-                                        <a  href="" class="waves-effect waves-light btn">Modifier</a>
+                                        <a  href="{{ path("edit_event", {'id': event.id}) }}" class="waves-effect waves-light btn">Modifier</a>
                                     {% endif %}
                                 </div>
                             </div>

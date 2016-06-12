@@ -4,8 +4,10 @@ namespace EventBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use EventBundle\Repository\EventRepository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use EventBundle\Form\EventType;
 use EventBundle\Entity\Event;
 
@@ -54,13 +56,14 @@ class EventController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $event->setCreatedBy($this->getUser());
+            $event->addParticipant($this->getUser());
+            $event->setCreatedAt(new \DateTime('now'));
+            $em->persist($event);
             $em->flush();
             return new Response('News updated successfully');
         }
 
-//        $build['form'] = $form->createView();
-//
-//        return $this->render('FooNewsBundle:Default:news_add.html.twig', $build);
         return $this->render("EventBundle:Form:edit_event.html.twig", array('form' => $form->createView()));
     }
 
@@ -70,6 +73,14 @@ class EventController extends Controller
 
         $user = $this->getUser();
         return $this->render("UserBundle:User:all_events.html.twig", array('user' => $user, 'events' => $events));
+    }
+
+    public function allEventsPastAction()
+    {
+        $events = $this->getDoctrine()->getManager()->getRepository('EventBundle:Event')->findAll();
+
+        $user = $this->getUser();
+        return $this->render("UserBundle:User:all_events_past.html.twig", array('user' => $user, 'events' => $events));
     }
 
     public function registerUserForEventAction($id)
@@ -139,4 +150,17 @@ class EventController extends Controller
         return $this->render("UserBundle:User:all_user_events.html.twig", array('user' => $user, 'events' => $eventsUser));
     }
 
+    public function photoAlbumAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $event = $em->getRepository('EventBundle:Event')->find($id);
+        $user = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->find($this->getUser()->getId());
+
+        return $this->render("EventBundle:Event:event_photo_album.html.twig", array('user' => $user, 'event' => $event));
+    }
+
+    public function addPhotoAction()
+    {
+
+    }
 }

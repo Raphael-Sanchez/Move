@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="fr">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    {# MATERIALIZE #}
+    <link href="http://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link type="text/css" rel="stylesheet" href="{{ asset('bundles/framework/css/materialize/materialize.min.css') }}"  media="screen,projection"/>
+    {# BOOTSTRAP #}
+    <link href="{{ asset('bundles/framework/bootstrap/dist/css/bootstrap.min.css') }}" rel="stylesheet">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+    <link rel="stylesheet" href="https://code.getmdl.io/1.1.3/material.indigo-pink.min.css">
+</head>
+<body>
+<br>
+<br>
+<h2 style="text-align: center">Évènements passés</h2>
+<div class="container-fluid" style="margin-top: 100px">
+    <div class="row">
+        {% for event in events %}
+            {% if event.date|date('Y/m/d H:i') <= 'now'|date('Y/m/d H:i') %}
+                <div class="demo-card-square mdl-card mdl-shadow--2dp">
+                    <div class="mdl-card__title mdl-card--expand">
+                        <h2 class="mdl-card__title-text">{{ event.activity.name }}</h2>
+                    </div>
+                    <div class="mdl-card__supporting-text">
+                        {% if event.date|date('Y/m/d H:i') is not null %}<img src="{{ asset('bundles/framework/icons/icon_date.svg') }}" alt="icon-date"> {{ event.date|date('d/m/Y H:i')|replace(':', 'h') }}{% endif %}
+                        {% if event.city is not null %}<br><img src="{{ asset('bundles/framework/icons/icon_place.svg') }}" alt="icon-place">{{ event.zip }} {{ event.city }}, {{ event.address }}{% endif %}
+                    </div>
+                    <div class="mdl-card__actions mdl-card--border">
+                        <a href="{{ path("event_photo_album", {'id': event.id}) }}" style="display: block; color: white">
+                            <button class="mdl-button mdl-js-button mdl-button--raised mdl-js-ripple-effect mdl-button--accent" >
+                                Voir l'album photo
+                            </button>
+                        </a>
+                    </div>
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+</div>
+<style>
+
+    body
+    {
+        padding: 20px;
+    }
+
+
+    .demo-card-square.mdl-card {
+        width: 320px;
+        height: 320px;
+    }
+    .demo-card-square > .mdl-card__title {
+        color: #fff;
+        background:
+                url('../assets/demos/dog.png') bottom right 15% no-repeat #46B6AC;
+    }
+
+</style>
+</body>
+{# MATERIALIZE#}
+<script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+<script type="text/javascript" src="{{ asset('bundles/framework/js/materialize/materialize.min.js') }}"></script>
+{# BOOTSTRAP #}
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="{{ asset('bundles/framework/bootstrap/dist/js/bootstrap.min.js') }}"></script>
+<script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
+</html>
+
