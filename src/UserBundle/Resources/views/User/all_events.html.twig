@@ -59,7 +59,7 @@
                                         <a  href="{{ path('unregister_participant', {'id': event.id}) }}" class="waves-effect waves-light btn">Se désinscrire</a>
                                     {% endif %}
                                 {% else %}
-                                    <a  href="" class="waves-effect waves-light btn">Modifier</a>
+                                    <a  href="{{ path('edit_event', {'id': event.id}) }}" class="waves-effect waves-light btn">Modifier</a>
                                 {% endif %}
                             </div>
                         </div>
