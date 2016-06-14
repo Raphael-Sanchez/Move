@@ -97,6 +97,13 @@ class Event
     protected $createdAt;
 
     /**
+     * @var \DateTime
+     *
+     * @ORM\Column(name="updated_at", type="datetime", nullable=true)
+     */
+    protected $updatedAt;
+
+    /**
      * @var string
      *
      * @ORM\Column(type="text", nullable=true)
@@ -112,9 +119,9 @@ class Event
     protected $participants;
 
     /**
-     * @var string
+     * @var array
      *
-     * @ORM\Column(type="text", nullable=true)
+     * @ORM\Column(name="array_link_album", type="text")
      */
     protected $linkAlbum;
 
@@ -413,7 +420,23 @@ class Event
     }
 
     /**
-     * @return mixed
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
+    }
+
+    /**
+     * @param \DateTime $updatedAt
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+    }
+
+    /**
+     * @return array
      */
     public function getLinkAlbum()
     {
@@ -421,11 +444,22 @@ class Event
     }
 
     /**
-     * @param mixed $linkAlbum
+     * @param array $linkAlbum
      */
     public function setLinkAlbum($linkAlbum)
     {
         $this->linkAlbum = $linkAlbum;
     }
+
+    /**
+     * @param string $linkAlbum
+     */
+    public function addLinkAlbum($linkAlbum)
+    {
+        $this->linkAlbum[] = $linkAlbum;
+    }
+
+
+
 
 }

@@ -47,7 +47,7 @@ class EventController extends Controller
             );
         }
 
-        $event = new Event();
+//        $event = new Event();
         $form = $this->createForm(EventType::class, $event);
         $form->add('submit', SubmitType::class, array(
             'label' => 'Envoyer',
@@ -56,9 +56,7 @@ class EventController extends Controller
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-            $event->setCreatedBy($this->getUser());
-            $event->addParticipant($this->getUser());
-            $event->setCreatedAt(new \DateTime('now'));
+            $event->setUpdatedAt(new \DateTime('now'));
             $em->persist($event);
             $em->flush();
             return new Response('News updated successfully');
@@ -159,8 +157,30 @@ class EventController extends Controller
         return $this->render("EventBundle:Event:event_photo_album.html.twig", array('user' => $user, 'event' => $event));
     }
 
-    public function addPhotoAction()
+    public function addPhotoAction(Request $request)
     {
+        $user = $this->getDoctrine()->getManager()->getRepository('UserBundle:User')->find($this->getUser()->getId());
+        $data = $request->request->all();
+
+        $formData = $data['formData'];
+
+
+        if($formData[0] && $formData[1])
+        {
+            $em = $this->getDoctrine()->getManager();
+            $event = $em->getRepository('EventBundle:Event')->find($formData[1]);
+
+            $test = $formData[0];
+
+            $event->addLinkAlbum($test);
+
+           
+            $em->persist($event);
+            $em->flush();
+
+            return $this->render("EventBundle:Event:event_photo_album.html.twig", array('user' => $user, 'event' => $event));
+        }
+
 
     }
 }

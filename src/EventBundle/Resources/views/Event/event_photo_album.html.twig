@@ -32,16 +32,18 @@
             </div>
             <dialog class="mdl-dialog">
                 <h4 class="mdl-dialog__title">Ajouter un album photo</h4>
-                <div class="mdl-dialog__content">
-                    <div class="mdl-textfield mdl-js-textfield">
-                        <input class="mdl-textfield__input" type="text" id="sample1">
-                        <label class="mdl-textfield__label" for="sample1">Lien...</label>
+                <form action="" method="POST">
+                    <div class="mdl-dialog__content">
+                        <div class="mdl-textfield mdl-js-textfield">
+                            <input class="mdl-textfield__input" name="link-form" type="text" id="sample1">
+                            <label class="mdl-textfield__label" for="sample1">Lien...</label>
+                        </div>
                     </div>
-                </div>
-                <div class="mdl-dialog__actions">
-                    <button type="button" class="mdl-button close">Annuler</button>
-                    <button type="button" class="mdl-button" id="add-photo">Ajouter</button>
-                </div>
+                    <div class="mdl-dialog__actions">
+                        <button type="button" class="mdl-button close">Annuler</button>
+                        <button type="button" class="mdl-button" id="add-photo">Ajouter</button>
+                    </div>
+                </form>
             </dialog>
         </div>
     </main>
@@ -86,30 +88,32 @@
         dialog.close();
     });
 
-    {#$(window).load(function(){#}
+    $(window).load(function(){
 
-        {#$('#add-photo').click(function(){#}
+        $('#add-photo').click(function(){
 
-            {#var formData = $('#sample1').val();#}
+            var formData = [];
+            formData[0] = $('#sample1').val();
+            formData[1] = {{ event.id }};
 
-            {#console.log(formData);#}
+            var urlPost = "{{ path("add_photo_link") }}";
 
-            {#$.ajax({#}
-                {#url : "{{ path("add_photo_link") }}",#}
-                {#type: "POST",#}
-                {#data : formData,#}
-                {#success: function(data, textStatus, jqXHR)#}
-                {#{#}
-                    {#//data - response from server#}
-                {#},#}
-                {#error: function (jqXHR, textStatus, errorThrown)#}
-                {#{#}
+            $.ajax({
+                url : urlPost,
+                type: "POST",
+                data : {formData},
+                success: function(data, textStatus, jqXHR)
+                {
+                    console.log('success');
+                },
+                error: function (jqXHR, textStatus, errorThrown)
+                {
+                    console.log('error');
+                }
+            });
+        });
 
-                {#}#}
-            {#});#}
-        {#});#}
-
-    {#});#}
+    });
 
 </script>
 <script defer src="https://code.getmdl.io/1.1.3/material.min.js"></script>
