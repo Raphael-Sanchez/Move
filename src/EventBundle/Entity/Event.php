@@ -119,11 +119,10 @@ class Event
     protected $participants;
 
     /**
-     * @var array
      *
-     * @ORM\Column(name="array_link_album", type="text")
+     * @ORM\Column(name="array_link_album", type="array")
      */
-    protected $linkAlbum;
+    protected $linksAlbum;
 
 
     public function __construct()
@@ -438,17 +437,19 @@ class Event
     /**
      * @return array
      */
-    public function getLinkAlbum()
+    public function getLinksAlbum()
     {
-        return $this->linkAlbum;
+        return $this->linksAlbum;
     }
 
     /**
-     * @param array $linkAlbum
+     * @param array $linksAlbum
+     * return Event
      */
-    public function setLinkAlbum($linkAlbum)
+    public function setLinksAlbum($linksAlbum)
     {
-        $this->linkAlbum = $linkAlbum;
+        $this->linksAlbum = $linksAlbum;
+        return $this;
     }
 
     /**
@@ -456,7 +457,7 @@ class Event
      */
     public function addLinkAlbum($linkAlbum)
     {
-        $this->linkAlbum[] = $linkAlbum;
+        $this->linksAlbum[] = $linkAlbum;
     }
 
 

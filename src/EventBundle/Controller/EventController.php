@@ -169,18 +169,16 @@ class EventController extends Controller
         {
             $em = $this->getDoctrine()->getManager();
             $event = $em->getRepository('EventBundle:Event')->find($formData[1]);
+            $link = $formData[0];
 
-            $test = $formData[0];
+            $event->addLinkAlbum($link);
 
-            $event->addLinkAlbum($test);
-
-           
             $em->persist($event);
             $em->flush();
 
-            return $this->render("EventBundle:Event:event_photo_album.html.twig", array('user' => $user, 'event' => $event));
+            echo json_encode(array('status' => 'success','message'=> 'Album add with success'));
         }
 
-
+        echo json_encode(array('status' => 'error','message'=> 'Album not add'));
     }
 }

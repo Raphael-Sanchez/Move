@@ -83,6 +83,10 @@ class EventType extends AbstractType
                 "required"      => false,
                 "label"         => 'Informations Complémentaires',
             ))
+            ->add('additionalInfo', TextareaType::class, array(
+                "required"      => false,
+                "label"         => 'Informations Complémentaires',
+            ))
         ;
     }
 
