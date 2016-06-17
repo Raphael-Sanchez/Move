@@ -25,7 +25,7 @@
     <div class="container-fluid" style="margin-top: 100px">
         <div class="row">
             {% for event in events %}
-                {% if event.date|date('Y/m/d H:i') >= 'now'|date('Y/m/d H:i') %}
+                {% if event.date|date('Y/m/d H:i') >= 'now'|date('Y/m/d H:i') and event.private == 0 %}
                 <div class="col-md-3">
                     <div style="width: 300px; padding-right: 20px; box-sizing: border-box;">
                         <div class="card">
